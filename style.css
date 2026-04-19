@@ -25,6 +25,23 @@ body {
   overflow-x: hidden;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  transition: background 0.4s ease;
+}
+
+#page-transition {
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+#page-transition.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#page-transition.fade-out {
+  opacity: 0;
+  transform: scale(0.98);
 }
 
 .serif {
@@ -594,7 +611,508 @@ section {
   pointer-events: none;
 }
 
-/* Responsive */
+/* Project Pages Common */
+.project-page, .creatives-page, .dyansadhna-page, .sinx-page {
+  background-color: #FFD5E5; /* Light pink background */
+  min-height: 100vh;
+}
+
+.page-container, .project-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  position: relative;
+}
+
+.content-box {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 30px !important; /* Tighten padding */
+  box-shadow: 0 0 20px rgba(255, 120, 170, 0.2);
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.creative-section {
+  width: 100% !important;
+  margin-bottom: 30px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.section-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 15px !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.image-card, .video-container {
+  border-radius: 15px !important;
+  overflow: hidden;
+  transition: 0.3s ease;
+  width: 100% !important;
+  height: auto !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+.image-card:hover, .video-container:hover {
+  transform: scale(1.02);
+}
+
+.img-wrapper {
+  width: 100%;
+  height: 100%;
+  border-radius: 0 !important;
+}
+
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-grid {
+  display: grid;
+  gap: 15px !important;
+}
+
+.page-title {
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 5px !important;
+  line-height: 1;
+}
+
+.main-header {
+  margin-bottom: 40px !important;
+}
+
+/* Blend Shapes Global */
+.blend-shape {
+  position: absolute;
+  z-index: -1;
+  opacity: 0.6;
+  filter: blur(4px);
+  pointer-events: none;
+  width: 350px;
+}
+
+.blend-top-left {
+  top: -40px;
+  left: -80px;
+}
+
+.blend-bottom-right {
+  bottom: -40px;
+  right: -80px;
+}
+
+.blend-shape img {
+  width: 100%;
+  height: auto;
+}
+
+/* Astris Page Specific overrides if needed */
+.astris-page .project-main-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 35px;
+  color: #333;
+  box-shadow: 
+    0 0 20px rgba(255, 120, 170, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: visible;
+  margin-bottom: 40px;
+}
+
+.astris-page .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.astris-page .card-title {
+  font-size: 38px;
+  color: #fff;
+  line-height: 1;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+.astris-page .close-btn {
+  color: #fff;
+  transition: var(--transition);
+  opacity: 0.8;
+}
+
+.astris-page .close-btn:hover {
+  transform: rotate(90deg);
+  opacity: 1;
+}
+
+.brand-intro {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 0;
+}
+
+.ceat-logo {
+  flex: 0 0 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #eee;
+  padding: 10px;
+}
+
+.ceat-logo img {
+  width: 100%;
+}
+
+.brand-desc {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #333;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.project-context {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #333;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 5px;
+}
+
+.astris-banner {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.astris-banner img {
+  width: 100%;
+  border-radius: 0;
+  display: block;
+}
+
+.section-label-purple {
+  color: #8B5CF6;
+  font-size: 34px;
+  font-weight: 900;
+  margin-bottom: 15px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.product-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.product-item {
+  text-align: center;
+  transition: var(--transition);
+}
+
+.product-item:hover {
+  transform: scale(1.03);
+}
+
+.product-item .img-frame {
+  background: #fff;
+  padding: 5px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  aspect-ratio: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-item p {
+  font-size: 10px;
+  font-weight: 800;
+  color: #444;
+  text-transform: uppercase;
+}
+
+.product-range {
+  background: rgba(255, 255, 255, 0.4);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.range-title {
+  font-size: 17px;
+  font-weight: 900;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.range-intro {
+  font-size: 12px;
+  margin-bottom: 10px;
+  color: #000;
+  font-weight: 700;
+}
+
+.range-list {
+  list-style: none;
+}
+
+.range-list li {
+  font-size: 11.5px;
+  margin-bottom: 4px;
+  line-height: 1.3;
+  position: relative;
+  padding-left: 15px;
+  color: #444;
+}
+
+.range-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #333;
+  font-weight: 900;
+}
+
+.product-images-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.product-images-row .img-frame {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.product-images-row .img-frame:hover {
+  transform: scale(1.05);
+}
+
+.product-images-row img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.strategy-summary {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #000;
+  font-weight: 700;
+  margin-bottom: 35px;
+  padding: 0 5px;
+}
+
+.marketing-strategy-card {
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 25px;
+}
+
+.drive-kit {
+  margin-bottom: 25px;
+}
+
+.kit-title {
+  font-size: 17px;
+  font-weight: 900;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+}
+
+.kit-desc {
+  font-size: 12px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.kit-list {
+  list-style: none;
+}
+
+.kit-list li {
+  font-size: 11.5px;
+  margin-bottom: 3px;
+  padding-left: 15px;
+  position: relative;
+  color: #444;
+}
+
+.kit-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  font-weight: 900;
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.media-item h4 {
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.media-item img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: var(--transition);
+}
+
+.media-item img:hover {
+  transform: scale(1.03);
+}
+
+.promotion-section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+  align-items: flex-start;
+}
+
+.promo-image {
+  flex: 0 0 45%;
+}
+
+.promo-image img {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.promo-text {
+  flex: 1;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #000;
+}
+
+.promo-text p {
+  margin-bottom: 15px;
+}
+
+.vr-section {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.vr-image {
+  flex: 0 0 45%;
+}
+
+.vr-image img {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.vr-desc {
+  flex: 1;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #000;
+}
+
+/* Responsive Astris */
+@media (max-width: 1024px) {
+  .product-showcase, .media-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-container {
+    margin: 20px auto;
+  }
+  
+  .astris-page .project-main-card {
+    padding: 25px;
+  }
+
+  .product-showcase, .media-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .product-images-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .promotion-section, .vr-section, .brand-intro {
+    flex-direction: column;
+    text-align: left;
+  }
+  
+  .promo-image, .vr-image {
+    flex: 0 0 100%;
+  }
+
+  .ceat-logo {
+    flex: 0 0 auto;
+    width: 100px;
+    margin-bottom: 10px;
+  }
+
+  .astris-page .card-title {
+    font-size: 24px;
+  }
+
+  .section-label-purple {
+    font-size: 24px;
+  }
+}
+
+/* Global Responsive */
 @media (max-width: 1024px) {
   .hero-container {
     flex-direction: column;
