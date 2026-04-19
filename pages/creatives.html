@@ -3,327 +3,791 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CREATIVES | Visual Art & Design</title>
+    <title>CREATIVES | Riddhi Makvana</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-gradient-start: #fbc2eb;
-            --bg-gradient-end: #f8b5cb;
-            --glass-bg: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --pink-glow: 0 15px 35px rgba(232, 124, 159, 0.2);
-            --text-pink: #ec86a7; /* Exact pink from the design */
-            --white-card: #ffffff;
-        }
-
-        /* Smooth scrolling for the whole page */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body.creatives-page {
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+        /* Creatives Page Specific Styles - Glassmorphism Enhanced */
+        .creatives-page {
+            background: linear-gradient(135deg, #fbc2eb 0%, #f8b5cb 100%);
             min-height: 100vh;
-            margin: 0;
-            padding: 60px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            position: relative;
         }
 
-        /* Decorative Background Blend Shapes */
-        .blend-shape {
-            position: fixed;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.9;
-        }
-        .blend-top-left {
-            top: 2%;
-            left: 2%;
-            width: 250px;
-        }
-        .blend-mid-right {
-            top: 40%;
-            right: -80px;
-            width: 220px;
-        }
-        .blend-bottom-left {
-            bottom: 5%;
-            left: 15%;
-            width: 180px;
+        /* Override page-transition */
+        .creatives-page #page-transition {
+            background: transparent;
         }
 
-        /* Main Container - WIDENED FOR LAPTOP */
-        .page-container {
-            background: var(--glass-bg);
+        .creatives-page .background-overlay {
+            background: radial-gradient(circle at 10% 10%, rgba(255, 134, 168, 0.2) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 90%, rgba(255, 134, 168, 0.2) 0%, transparent 40%);
+        }
+
+        /* Main Container with Glass Effect */
+        .creatives-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 100px 40px 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Glass Card Container */
+        .glass-wrapper {
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 40px;
-            box-shadow: var(--pink-glow);
-            width: 100%;
-            max-width: 850px; /* Much wider and responsive for desktop */
-            position: relative;
-            z-index: 1;
-            margin: 0 auto;
+            border-radius: 48px;
+            padding: 45px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         /* Header Section */
-        .main-header {
+        .creatives-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 35px;
-            padding: 0 10px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
-        .page-title {
-            font-size: 36px;
-            color: #ffffff;
+
+        .creatives-title {
+            font-size: clamp(42px, 8vw, 72px);
             font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #ffe0ed 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 3px;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.1);
         }
-        .close-btn {
-            color: #111;
-            transition: transform 0.3s ease;
+
+        .back-link {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #2d2d2d;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            opacity: 0.8;
-            background: transparent;
-        }
-        .close-btn:hover {
-            transform: scale(1.15) rotate(90deg);
-            opacity: 1;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
-        /* White Cards - EXACTLY LIKE IMAGE */
-        .creative-section {
-            background: var(--white-card);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-            display: flex;
-            flex-direction: column;
-        }
-        .creative-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(232, 124, 159, 0.15);
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateX(-5px);
+            color: #000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Grid Alignment */
-        .image-grid {
+        /* Grid Layout */
+        .creatives-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+            margin-bottom: 45px;
+        }
+
+        /* Creative Card - White Glassmorphism */
+        .creative-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 32px;
+            padding: 28px;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .creative-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 45px rgba(232, 124, 159, 0.3);
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(255, 255, 255, 1);
+        }
+
+        /* Image Grid inside cards */
+        .card-image-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 18px; /* Space between images and label */
+            gap: 14px;
+            margin-bottom: 22px;
         }
-        
-        .img-wrapper {
-            border-radius: 10px;
+
+        .image-wrapper {
+            border-radius: 20px;
             overflow: hidden;
-            background: #f8f8f8;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(245, 245, 245, 0.8);
+            cursor: pointer;
             position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-        .img-wrapper img {
+
+        .square-img .image-wrapper {
+            aspect-ratio: 1 / 1;
+        }
+
+        .portrait-img .image-wrapper {
+            aspect-ratio: 3 / 4;
+        }
+
+        .image-wrapper img {
             width: 100%;
             height: 100%;
-            display: block;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .img-wrapper:hover img {
+
+        .image-wrapper:hover img {
             transform: scale(1.08);
         }
 
-        /* Aspect Ratios for Grid */
-        .square-grid .img-wrapper {
-            aspect-ratio: 1 / 1;
-        }
-        
-        .portrait-grid {
-            align-items: stretch; /* Stretches items to be same height */
-        }
-        .portrait-grid .img-wrapper {
-            aspect-ratio: 3 / 4; /* Keeps portrait images looking good */
+        .image-wrapper::after {
+            content: '🔍';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 5px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
 
-        /* Label inside the white card */
-        .section-label {
+        .image-wrapper:hover::after {
+            opacity: 1;
+        }
+
+        /* Card Label */
+        .card-label {
             font-size: 16px;
-            font-weight: 900;
-            color: var(--text-pink);
+            font-weight: 800;
+            color: #e06e92;
             text-transform: uppercase;
+            letter-spacing: 1.5px;
             margin: 0;
-            letter-spacing: 0.5px;
-            padding-left: 5px;
+            padding-left: 6px;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Reels Pill Button */
-        .reels-section {
-            background: var(--white-card);
-            border-radius: 50px;
-            padding: 22px 25px;
-            text-align: left;
-            margin-bottom: 0;
+        /* Reels Banner - Glassmorphism */
+        .reels-banner {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 60px;
+            padding: 28px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: block;
+            transition: all 0.35s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
-        .reels-section:hover {
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 12px 30px rgba(232, 124, 159, 0.15);
+
+        .reels-banner:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 25px 45px rgba(232, 124, 159, 0.3);
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(255, 255, 255, 1);
         }
+
         .reels-label {
-            font-size: 16px;
-            font-weight: 900;
-            color: var(--text-pink);
-            margin: 0;
+            font-size: 22px;
+            font-weight: 800;
+            color: #e06e92;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reels-label::after {
+            content: "▶";
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+
+        .reels-banner:hover .reels-label::after {
+            transform: translateX(5px);
+        }
+
+        .reels-arrow {
+            font-size: 28px;
+            transition: transform 0.2s;
+            color: #e06e92;
+        }
+
+        .reels-banner:hover .reels-arrow {
+            transform: translateX(8px);
+        }
+
+        /* Decorative Blend Shapes */
+        .creatives-blend {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+            filter: blur(3px);
+        }
+
+        .blend-1 {
+            top: 5%;
+            left: -3%;
+            width: 280px;
+        }
+
+        .blend-2 {
+            bottom: 10%;
+            right: -5%;
+            width: 320px;
+        }
+
+        .blend-3 {
+            top: 40%;
+            left: -2%;
+            width: 200px;
+        }
+
+        /* Lightbox Modal - Glassmorphism */
+        .lightbox-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content {
+            max-width: 85%;
+            max-height: 85%;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .lightbox-modal.active .lightbox-content {
+            transform: scale(1);
+        }
+
+        .lightbox-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .close-lightbox:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(90deg);
+        }
+
+        /* Reels Modal - Glassmorphism */
+        .reels-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .reels-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .reels-modal-content {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            max-width: 550px;
+            width: 90%;
+            border-radius: 48px;
+            padding: 45px 40px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .reels-modal.active .reels-modal-content {
+            transform: scale(1);
+        }
+
+        .reels-modal-content h3 {
+            font-size: 34px;
+            color: #e06e92;
+            margin-bottom: 18px;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .reels-modal-content p {
+            color: #444;
+            margin-bottom: 35px;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .reels-modal-buttons {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+        }
+
+        .reels-modal-btn {
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
             letter-spacing: 0.5px;
-            padding-left: 5px;
         }
 
-        /* Responsive adjustments for Mobile & Tablets */
+        .reels-modal-btn.primary {
+            background: #e06e92;
+            color: white;
+            box-shadow: 0 4px 12px rgba(224, 110, 146, 0.3);
+        }
+
+        .reels-modal-btn.primary:hover {
+            background: #d45a82;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(224, 110, 146, 0.4);
+        }
+
+        .reels-modal-btn.secondary {
+            background: rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(5px);
+            color: #555;
+        }
+
+        .reels-modal-btn.secondary:hover {
+            background: rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .glass-wrapper {
+                padding: 35px;
+            }
+            .creatives-container {
+                padding: 90px 25px 60px;
+            }
+            .creatives-grid {
+                gap: 25px;
+            }
+            .creative-card {
+                padding: 22px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .page-container {
-                max-width: 95%;
-                padding: 30px 20px;
+            .glass-wrapper {
+                padding: 28px;
             }
-            .page-title {
-                font-size: 30px;
+            .creatives-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
             }
-        }
-
-        @media (max-width: 480px) {
-            body.creatives-page {
-                padding: 20px 10px;
+            .creatives-header {
+                margin-bottom: 40px;
             }
-            .page-container {
-                padding: 20px 15px;
-                border-radius: 20px;
+            .reels-banner {
+                padding: 22px 28px;
             }
-            .page-title {
-                font-size: 24px;
+            .reels-label {
+                font-size: 18px;
             }
-            .creative-section {
-                padding: 15px;
-            }
-            .image-grid {
-                gap: 10px;
-                margin-bottom: 12px;
-            }
-            .section-label, .reels-label {
+            .card-label {
                 font-size: 14px;
             }
+        }
+
+        @media (max-width: 550px) {
+            .glass-wrapper {
+                padding: 20px;
+                border-radius: 32px;
+            }
+            .creatives-container {
+                padding: 80px 15px 50px;
+            }
+            .card-image-grid {
+                gap: 10px;
+            }
+            .creative-card {
+                padding: 18px;
+                border-radius: 24px;
+            }
+            .reels-banner {
+                padding: 18px 24px;
+                border-radius: 40px;
+            }
+            .reels-label {
+                font-size: 15px;
+            }
+            .reels-modal-content {
+                padding: 35px 25px;
+            }
+            .reels-modal-content h3 {
+                font-size: 28px;
+            }
+        }
+
+        /* GSAP Reveal Class */
+        .gs-reveal {
+            will-change: transform, opacity;
         }
     </style>
 </head>
 <body class="creatives-page">
     <div id="page-transition">
-    <div class="background-overlay"></div>
-    
-    <img src="../assets/ELEMENTS/Blend Group 2.svg" alt="" class="blend-shape blend-top-left">
-    <img src="../assets/ELEMENTS/Blend Group 2.svg" alt="" class="blend-shape blend-mid-right">
-    <img src="../assets/ELEMENTS/Blend Group 2.svg" alt="" class="blend-shape blend-bottom-left">
+        <div class="background-overlay"></div>
 
-    <main class="page-container gs-reveal">
-        
-        <header class="main-header">
-            <h1 class="page-title">CREATIVES</h1>
-            <a href="index.html" class="close-btn" aria-label="Close">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </a>
-        </header>
+        <!-- Decorative Blend Shapes -->
+        <img src="../assets/ELEMENTS/Blend Group 2.svg" alt="" class="creatives-blend blend-1">
+        <img src="../assets/ELEMENTS/Blend Group 4.svg" alt="" class="creatives-blend blend-2">
+        <img src="../assets/ELEMENTS/Blend Group 3.svg" alt="" class="creatives-blend blend-3">
 
-        <section class="creative-section gs-reveal">
-            <div class="image-grid square-grid">
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/SINGLE P 1.jpg" alt="Single Post 1"></div>
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/SINGLE P 2'.jpg" alt="Single Post 2"></div>
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/SINGLE P3.jpg" alt="Single Post 3"></div>
+        <main class="creatives-container">
+            
+            <!-- Main Glass Wrapper -->
+            <div class="glass-wrapper">
+                
+                <header class="creatives-header gs-reveal">
+                    <h1 class="creatives-title">CREATIVES</h1>
+                    <a href="index.html" class="back-link">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Back to Home
+                    </a>
+                </header>
+
+                <div class="creatives-grid">
+                    
+                    <!-- SINGLE POSTS Card -->
+                    <div class="creative-card gs-reveal">
+                        <div class="card-image-grid square-img">
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/SINGLE P 1.jpg">
+                                <img src="../assets/ELEMENTS/CREATIVES/SINGLE P 1.jpg" alt="Single Post 1" onerror="this.src='https://placehold.co/400x400/FFB7D2/FFFFFF?text=Single+Post'">
+                            </div>
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/SINGLE P 2'.jpg">
+                                <img src="../assets/ELEMENTS/CREATIVES/SINGLE P 2'.jpg" alt="Single Post 2" onerror="this.src='https://placehold.co/400x400/FFC0CB/FFFFFF?text=Single+Post'">
+                            </div>
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/SINGLE P3.jpg">
+                                <img src="../assets/ELEMENTS/CREATIVES/SINGLE P3.jpg" alt="Single Post 3" onerror="this.src='https://placehold.co/400x400/FDA7DF/FFFFFF?text=Single+Post'">
+                            </div>
+                        </div>
+                        <h2 class="card-label">✦ SINGLE POSTS</h2>
+                    </div>
+
+                    <!-- CAROUSELS Card -->
+                    <div class="creative-card gs-reveal">
+                        <div class="card-image-grid square-img">
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/CAROUSEL 1.png">
+                                <img src="../assets/ELEMENTS/CREATIVES/CAROUSEL 1.png" alt="Carousel 1" onerror="this.src='https://placehold.co/400x400/FFB7D2/FFFFFF?text=Carousel'">
+                            </div>
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/CAROUSEL 2.png">
+                                <img src="../assets/ELEMENTS/CREATIVES/CAROUSEL 2.png" alt="Carousel 2" onerror="this.src='https://placehold.co/400x400/FFC0CB/FFFFFF?text=Carousel'">
+                            </div>
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/CAROUSEL 3.png">
+                                <img src="../assets/ELEMENTS/CREATIVES/CAROUSEL 3.png" alt="Carousel 3" onerror="this.src='https://placehold.co/400x400/FDA7DF/FFFFFF?text=Carousel'">
+                            </div>
+                        </div>
+                        <h2 class="card-label">◉ CAROUSELS</h2>
+                    </div>
+
+                    <!-- FESTIVES Card (Portrait) -->
+                    <div class="creative-card gs-reveal">
+                        <div class="card-image-grid portrait-img">
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/FESTIVES1.jpg">
+                                <img src="../assets/ELEMENTS/CREATIVES/FESTIVES1.jpg" alt="Festive 1" onerror="this.src='https://placehold.co/400x533/FFB7D2/FFFFFF?text=Festive'">
+                            </div>
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/FESTIVES 2.png">
+                                <img src="../assets/ELEMENTS/CREATIVES/FESTIVES 2.png" alt="Festive 2" onerror="this.src='https://placehold.co/400x533/FFC0CB/FFFFFF?text=Festive'">
+                            </div>
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/FESTIVES 3.png">
+                                <img src="../assets/ELEMENTS/CREATIVES/FESTIVES 3.png" alt="Festive 3" onerror="this.src='https://placehold.co/400x533/FDA7DF/FFFFFF?text=Festive'">
+                            </div>
+                        </div>
+                        <h2 class="card-label">✧ FESTIVES</h2>
+                    </div>
+
+                    <!-- FREELANCE Card (Portrait) -->
+                    <div class="creative-card gs-reveal">
+                        <div class="card-image-grid portrait-img">
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/FREELANCE 01 .png">
+                                <img src="../assets/ELEMENTS/CREATIVES/FREELANCE 01 .png" alt="Freelance 1" onerror="this.src='https://placehold.co/400x533/FFB7D2/FFFFFF?text=Freelance'">
+                            </div>
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/FREE LANCE 02.png">
+                                <img src="../assets/ELEMENTS/CREATIVES/FREE LANCE 02.png" alt="Freelance 2" onerror="this.src='https://placehold.co/400x533/FFC0CB/FFFFFF?text=Freelance'">
+                            </div>
+                            <div class="image-wrapper" data-img="../assets/ELEMENTS/CREATIVES/FREELANCE03.png">
+                                <img src="../assets/ELEMENTS/CREATIVES/FREELANCE03.png" alt="Freelance 3" onerror="this.src='https://placehold.co/400x533/FDA7DF/FFFFFF?text=Freelance'">
+                            </div>
+                        </div>
+                        <h2 class="card-label">⚡ FREELANCE</h2>
+                    </div>
+
+                </div>
+
+                <!-- Reels Banner -->
+                <div class="reels-banner gs-reveal" id="reelsTrigger">
+                    <span class="reels-label">REELS (CLICK TO EXPLORE)</span>
+                    <span class="reels-arrow">→</span>
+                </div>
+
+            </div><!-- End Glass Wrapper -->
+
+        </main>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightboxModal">
+        <div class="close-lightbox">✕</div>
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="" alt="Enlarged view">
+        </div>
+    </div>
+
+    <!-- Reels Modal -->
+    <div class="reels-modal" id="reelsModal">
+        <div class="reels-modal-content">
+            <h3>🎬 REELS STUDIO</h3>
+            <p>Dynamic short-form content • Motion graphics • Video editing<br><br>
+            <strong>🎥 Immersive reels & showreels coming soon!</strong><br>
+            Get ready for engaging visual storytelling.</p>
+            <div class="reels-modal-buttons">
+                <button class="reels-modal-btn primary" id="notifyBtn">Notify Me</button>
+                <button class="reels-modal-btn secondary" id="closeReelsModal">Close</button>
             </div>
-            <h2 class="section-label">SINGLE POSTS</h2>
-        </section>
-
-        <section class="creative-section gs-reveal">
-            <div class="image-grid square-grid">
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/CAROUSEL 1.png" alt="Carousel 1"></div>
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/CAROUSEL 2.png" alt="Carousel 2"></div>
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/CAROUSEL 3.png" alt="Carousel 3"></div>
-            </div>
-            <h2 class="section-label">CAROUSELS</h2>
-        </section>
-
-        <section class="creative-section gs-reveal">
-            <div class="image-grid portrait-grid">
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/FESTIVES1.jpg" alt="Festive 1"></div>
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/FESTIVES 2.png" alt="Festive 2"></div>
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/FESTIVES 3.png" alt="Festive 3"></div>
-            </div>
-            <h2 class="section-label">FESTIVES</h2>
-        </section>
-
-        <section class="creative-section gs-reveal">
-            <div class="image-grid portrait-grid">
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/FREELANCE 01 .png" alt="Freelance 1"></div>
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/FREE LANCE 02.png" alt="Freelance 2"></div>
-                <div class="img-wrapper"><img src="../assets/ELEMENTS/CREATIVES/FREELANCE03.png" alt="Freelance 3"></div>
-            </div>
-            <h2 class="section-label">FREELANCE</h2>
-        </section>
-
-        <a href="#" class="reels-section gs-reveal">
-            <h2 class="reels-label">REELS (CLICK TO OPEN)</h2>
-        </a>
-
-    </main>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script>
-        gsap.registerPlugin(ScrollTrigger);
+        (function() {
+            // Register GSAP plugins
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+            }
 
-        const revealElements = gsap.utils.toArray('.gs-reveal');
-        
-        revealElements.forEach((el, index) => {
-            gsap.fromTo(el, 
-                { y: 40, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.8,
-                    delay: index * 0.05, 
-                    ease: "back.out(1.2)", // Bouncy smooth effect
-                    scrollTrigger: {
-                        trigger: el,
-                        start: "top 90%", // Triggers nicely when entering viewport
-                        toggleActions: "play none none reverse"
+            // Page transition - fade in
+            const pageTransition = document.getElementById("page-transition");
+            if (pageTransition) {
+                requestAnimationFrame(() => {
+                    pageTransition.classList.add("show");
+                });
+            }
+
+            // GSAP Reveal Animations
+            const revealElements = document.querySelectorAll('.gs-reveal');
+            if (revealElements.length && typeof gsap !== 'undefined') {
+                revealElements.forEach((el, idx) => {
+                    gsap.set(el, { y: 40, opacity: 0 });
+                    gsap.to(el, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        delay: idx * 0.1,
+                        ease: "back.out(1.1)",
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 90%",
+                            toggleActions: "play none none reverse"
+                        }
+                    });
+                });
+            } else if (revealElements.length) {
+                revealElements.forEach(el => {
+                    el.style.opacity = "1";
+                    el.style.transform = "translateY(0)";
+                });
+            }
+
+            // Floating animation for blend shapes
+            if (typeof gsap !== 'undefined') {
+                gsap.to(".blend-1", {
+                    y: 30,
+                    rotation: 5,
+                    duration: 4,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+                gsap.to(".blend-2", {
+                    y: -25,
+                    rotation: -3,
+                    duration: 5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+                gsap.to(".blend-3", {
+                    x: 20,
+                    duration: 6,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut"
+                });
+            }
+
+            // Lightbox functionality
+            const lightboxModal = document.getElementById('lightboxModal');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const closeLightbox = document.querySelector('.close-lightbox');
+            
+            // Add click listeners to all image wrappers
+            const imageWrappers = document.querySelectorAll('.image-wrapper');
+            imageWrappers.forEach(wrapper => {
+                wrapper.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const imgElement = wrapper.querySelector('img');
+                    if (imgElement && imgElement.src) {
+                        lightboxImg.src = imgElement.src;
+                        lightboxModal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
                     }
-                }
-            );
-        });
+                });
+            });
+
+            // Close lightbox
+            const closeLightboxModal = () => {
+                lightboxModal.classList.remove('active');
+                document.body.style.overflow = '';
+            };
+            
+            if (closeLightbox) closeLightbox.addEventListener('click', closeLightboxModal);
+            lightboxModal.addEventListener('click', (e) => {
+                if (e.target === lightboxModal) closeLightboxModal();
+            });
+
+            // Reels Modal functionality
+            const reelsTrigger = document.getElementById('reelsTrigger');
+            const reelsModal = document.getElementById('reelsModal');
+            const closeReelsModal = document.getElementById('closeReelsModal');
+            const notifyBtn = document.getElementById('notifyBtn');
+
+            if (reelsTrigger) {
+                reelsTrigger.addEventListener('click', () => {
+                    reelsModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            const closeModal = () => {
+                reelsModal.classList.remove('active');
+                document.body.style.overflow = '';
+            };
+
+            if (closeReelsModal) closeReelsModal.addEventListener('click', closeModal);
+            if (notifyBtn) {
+                notifyBtn.addEventListener('click', () => {
+                    alert("✨ Thanks for your interest! Reels portfolio launching soon. Stay tuned for creative motion content!");
+                    closeModal();
+                });
+            }
+            reelsModal.addEventListener('click', (e) => {
+                if (e.target === reelsModal) closeModal();
+            });
+
+            // Handle back link with page transition
+            const backLink = document.querySelector('.back-link');
+            if (backLink) {
+                backLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    if (pageTransition) {
+                        pageTransition.classList.add('fade-out');
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 350);
+                    } else {
+                        window.location.href = href;
+                    }
+                });
+            }
+
+            // Image error handling
+            const allImages = document.querySelectorAll('.image-wrapper img');
+            allImages.forEach(img => {
+                img.setAttribute('draggable', 'false');
+            });
+        })();
     </script>
     <script src="../main.js"></script>
 </body>
