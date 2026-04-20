@@ -168,40 +168,42 @@ section {
 .hero-right {
   flex: 1.2;
   display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hero-profile img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(133, 64, 89, 0.5);
+  box-shadow: 0 0 20px rgba(255, 120, 170, 0.3);
+  transition: var(--transition);
+}
+
+.hero-profile img:hover {
+  transform: scale(1.05);
+}
+
+.hero-text {
+  flex: 1;
+  display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 }
-
-.name-box {
-  border: 2px dashed var(--accent-pink);
-  padding: 15px 30px;
-  display: inline-block;
-  margin-bottom: 30px;
-  position: relative;
-  text-align: center;
-}
-
-.name-box::before, .name-box::after {
-  content: '';
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: var(--accent-pink);
-}
-
-.name-box::before { top: -6px; left: -6px; }
-.name-box::after { bottom: -6px; right: -6px; }
 
 .hero-name {
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 800;
   letter-spacing: 1px;
+  margin-bottom: 15px;
 }
 
 .hero-description {
   font-size: 15px;
   max-width: 600px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   opacity: 0.8;
   line-height: 1.8;
   text-align: left;
@@ -356,53 +358,42 @@ section {
 
 .experience-item {
   display: flex;
-  gap: 40px;
+  gap: 20px;
   align-items: flex-start;
-  padding: 30px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 30px;
   transition: var(--transition);
 }
 
 .experience-item:last-child {
-  border-bottom: none;
-}
-
-.experience-item:hover {
-  background: rgba(255, 255, 255, 0.02);
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius: 20px;
+  margin-bottom: 0;
 }
 
 .exp-logo {
-  flex: 0 0 100px;
-  height: 100px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  width: 140px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(255, 120, 170, 0.15);
+  flex-shrink: 0;
+  transition: var(--transition);
 }
 
-.exp-logo img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+.experience-item:hover .exp-logo {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 120, 170, 0.3);
 }
 
 .exp-text h3 {
   font-size: clamp(16px, 2vw, 18px);
   color: var(--accent-pink);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   font-weight: 700;
 }
 
 .exp-text p {
   font-size: 14px;
   opacity: 0.8;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 /* Progress Circle */
@@ -609,6 +600,46 @@ section {
   opacity: 0.5;
   transform: rotate(15deg);
   pointer-events: none;
+}
+
+/* Digital Painting Specific */
+.digital-painting-page {
+  background-color: #FFD5E5;
+  min-height: 100vh;
+}
+
+.paint-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 30px;
+  transition: var(--transition);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.paint-card:last-child {
+  margin-bottom: 0;
+}
+
+.paint-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 30px rgba(255, 120, 170, 0.2);
+}
+
+.paint-card img {
+  width: 100%;
+  border-radius: 14px;
+  display: block;
+  object-fit: cover;
+}
+
+.paint-label {
+  color: var(--accent-pink);
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Project Pages Common */
@@ -1071,6 +1102,11 @@ section {
 }
 
 @media (max-width: 768px) {
+  .hero-profile img {
+    width: 60px;
+    height: 60px;
+  }
+  
   .project-container {
     margin: 20px auto;
   }
