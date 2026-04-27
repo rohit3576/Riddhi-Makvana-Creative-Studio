@@ -1,34 +1,43 @@
 window.addEventListener("DOMContentLoaded", () => {
-  // Page Transition: Fade in on load
-  const pageTransition = document.getElementById("page-transition");
-  if (pageTransition) {
-    // Small delay to ensure initial state is applied before showing
-    requestAnimationFrame(() => {
-      pageTransition.classList.add("show");
-    });
-  }
+  // Page Transition: Smooth navigation logic
+  const overlay = document.querySelector(".page-transition");
+  const links = document.querySelectorAll("a");
 
-  // Page Transition: Fade out on link click
-  document.querySelectorAll("a").forEach(link => {
-    // Only apply to internal links that aren't anchors
+  links.forEach(link => {
+    // Only apply to internal links that aren't anchors or target="_blank"
     const isInternal = link.hostname === window.location.hostname || !link.hostname;
     const isAnchor = link.getAttribute("href")?.startsWith("#");
+    const isBlank = link.getAttribute("target") === "_blank";
     
-    if (isInternal && !isAnchor && link.getAttribute("target") !== "_blank") {
+    if (isInternal && !isAnchor && !isBlank) {
       link.addEventListener("click", function(e) {
         const href = this.href;
         if (!href || href.includes("javascript:void(0)")) return;
 
         e.preventDefault();
-        if (pageTransition) {
-          pageTransition.classList.add("fade-out");
-          setTimeout(() => {
-            window.location.href = href;
-          }, 350);
-        } else {
-          window.location.href = href;
+        
+        // Add exit animation to body
+        document.body.classList.add("page-exit");
+        
+        // Show transition overlay
+        if (overlay) {
+          overlay.classList.add("active");
         }
+
+        setTimeout(() => {
+          window.location.href = href;
+        }, 600);
       });
+    }
+  });
+
+  // Handle browser back button (pageshow)
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      document.body.classList.remove("page-exit");
+      if (overlay) {
+        overlay.classList.remove("active");
+      }
     }
   });
 
