@@ -1,112 +1,373 @@
 window.addEventListener("DOMContentLoaded", () => {
-  // Page Transition: Smooth navigation logic
-  const overlay = document.querySelector(".page-transition");
-  const links = document.querySelectorAll("a");
+    // Register GSAP Plugins
+    if (typeof gsap !== "undefined") {
+        gsap.registerPlugin(ScrollTrigger);
+    }
 
-  links.forEach(link => {
-    // Only apply to internal links that aren't anchors or target="_blank"
-    const isInternal = link.hostname === window.location.hostname || !link.hostname;
-    const isAnchor = link.getAttribute("href")?.startsWith("#");
-    const isBlank = link.getAttribute("target") === "_blank";
-    
-    if (isInternal && !isAnchor && !isBlank) {
-      link.addEventListener("click", function(e) {
-        const href = this.href;
-        if (!href || href.includes("javascript:void(0)")) return;
+    // --- NAVIGATION LOGIC ---
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('section');
 
-        e.preventDefault();
-        
-        // Add exit animation to body
-        document.body.classList.add("page-exit");
-        
-        // Show transition overlay
-        if (overlay) {
-          overlay.classList.add("active");
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.3
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').slice(1) === entry.target.id) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+
+    // --- PROJECT MODAL LOGIC ---
+    const projects = {
+        astris: `
+            <div class="project-header">
+                <h2>ASTRIS SEAT COVERS</h2>
+                <div class="logo-box">
+                    <img src="assets/ELEMENTS/CEAT/logo transparant.png" alt="CEAT">
+                </div>
+            </div>
+            
+            <div class="brand-intro-section">
+                <p>Conceptualized a brand extension for CEAT - ASTRIS, focused on sustainable and budget-friendly automotive accessories, including seat covers and steering covers.</p>
+                <img src="assets/ELEMENTS/CEAT/ASTRIS.png" alt="ASTRIS SEAT COVERS">
+            </div>
+
+            <div class="introducing-section">
+                <h3 style="color: var(--accent-pink); margin-bottom: 20px;">INTRODUCING</h3>
+                <div class="product-showcase">
+                    <div class="product-item">
+                        <div class="img-frame"><img src="assets/ELEMENTS/CEAT/SPORTS .jpg" alt="SPORTS"></div>
+                        <p>SPORTS</p>
+                    </div>
+                    <div class="product-item">
+                        <div class="img-frame"><img src="assets/ELEMENTS/CEAT/PET PROOF.jpg" alt="PET PROOF"></div>
+                        <p>PET PROOF</p>
+                    </div>
+                    <div class="product-item">
+                        <div class="img-frame"><img src="assets/ELEMENTS/CEAT/LUXURY.jpg" alt="LUXURY"></div>
+                        <p>LUXURY</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="marketing-strategy-card">
+                <h3 style="color: var(--accent-pink); margin-bottom: 20px;">MARKETING STRATEGY</h3>
+                <div class="media-grid">
+                    <div class="media-item">
+                        <img src="assets/ELEMENTS/CEAT/BILLBOARD.png" alt="Billboard">
+                        <p>Billboard</p>
+                    </div>
+                    <div class="media-item">
+                        <img src="assets/ELEMENTS/CEAT/NEWPAPER.png" alt="Newspaper">
+                        <p>Newspaper</p>
+                    </div>
+                    <div class="media-item">
+                        <img src="assets/ELEMENTS/CEAT/SOCIAL M.png" alt="Social Media">
+                        <p>Social Media</p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="assets/pdfs/CEAT report.pdf" download class="download-btn">Download Case Study</a>
+        `,
+
+        sinx: `
+            <h2>S!NX by SNITCH</h2>
+            <p>Brand Strategy & Design for Gen Z urban youth streetwear.</p>
+            
+            <img src="assets/ELEMENTS/SNITCH/SINXfinal.svg" alt="S!NX Banner" style="background: white; padding: 20px;">
+
+            <div class="stp-grid">
+                <div class="stp-col">
+                    <h4>SEGMENTATION</h4>
+                    <p>Gen Z (18-25), urban youth, streetwear-focused.</p>
+                </div>
+                <div class="stp-col">
+                    <h4>TARGETING</h4>
+                    <p>Niche focus on affordable luxury-inspired sneakers.</p>
+                </div>
+                <div class="stp-col">
+                    <h4>POSITIONING</h4>
+                    <p>Bold self-expression for urban youth.</p>
+                </div>
+            </div>
+
+            <div class="product-showcase">
+                <div class="product-item">
+                    <div class="img-frame"><img src="assets/ELEMENTS/SNITCH/THE OG.png" alt="The Originals"></div>
+                    <p>THE ORIGINALS</p>
+                </div>
+                <div class="product-item">
+                    <div class="img-frame"><img src="assets/ELEMENTS/SNITCH/GLOW.png" alt="Glow"></div>
+                    <p>GLOW</p>
+                </div>
+                <div class="product-item">
+                    <div class="img-frame"><img src="assets/ELEMENTS/SNITCH/SWTICH.jpg" alt="Switch"></div>
+                    <p>SWITCH</p>
+                </div>
+            </div>
+
+            <div class="imc-flow">
+                <div class="imc-step"><h4>PRE-LAUNCH</h4><p>Teasers & Buzz</p></div>
+                <div class="imc-arrow">→</div>
+                <div class="imc-step"><h4>LAUNCH</h4><p>Influencers & Events</p></div>
+                <div class="imc-arrow">→</div>
+                <div class="imc-step"><h4>POST-LAUNCH</h4><p>Community Building</p></div>
+            </div>
+
+            <div class="tvc-block">
+                <video autoplay muted loop playsinline preload="metadata">
+                    <source src="assets/ELEMENTS/VIDEOS/S!NX TVC.mp4" type="video/mp4">
+                </video>
+                <div class="tvc-text-container">
+                    <h3 class="tvc-title">TVC</h3>
+                </div>
+            </div>
+
+            <a href="assets/pdfs/S!NX rports.pdf" download class="download-btn">Download Case Study</a>
+        `,
+
+        dyansadhna: `
+            <h2>DYANSADHNA</h2>
+            <p>Holistic child development brand nurturing mental and physical growth beyond academics.</p>
+            
+            <img src="assets/ELEMENTS/DYANSADHNA/PRIMARY_LOGO.png" alt="Primary Logo" style="max-width: 300px; display: block; margin: 0 auto;">
+
+            <div class="inner-section">
+                <h3 style="color: var(--accent-pink); margin-bottom: 20px;">LOGO EXPLANATION</h3>
+                <div class="media-grid">
+                    <img src="assets/ELEMENTS/DYANSADHNA/LOGO EXPLANATION Primary logo.png" alt="Logo Expl 1">
+                    <img src="assets/ELEMENTS/DYANSADHNA/LOGO EXPLANATION Secondary logo.png" alt="Logo Expl 2">
+                </div>
+            </div>
+
+            <div class="inner-section">
+                <h3 style="color: var(--accent-pink); margin-bottom: 20px;">STATIONARY & MOCKUPS</h3>
+                <div class="media-grid">
+                    <img src="assets/ELEMENTS/DYANSADHNA/CORPORATE STATIONARY letterhead mockup.png" alt="Letterhead">
+                    <img src="assets/ELEMENTS/DYANSADHNA/outdoor mockup.png" alt="Outdoor">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TRANSIT.png" alt="Transit">
+                </div>
+            </div>
+
+            <div class="inner-section">
+                <h3 style="color: var(--accent-pink); margin-bottom: 20px;">TVC STORYBOARD</h3>
+                <div class="storyboard-grid">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/O1.png" alt="S1">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/02.png" alt="S2">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/03.png" alt="S3">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/04.png" alt="S4">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/05.png" alt="S5">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/06.png" alt="S6">
+                </div>
+            </div>
+
+            <a href="assets/pdfs/dyansadhna report.pdf" download class="download-btn">Download Case Study</a>
+        `,
+
+        creatives: `
+            <h2>CREATIVES</h2>
+            <p>Social Media Design & Content Handling for various brands.</p>
+
+            <div class="modal-creatives-grid">
+                <div class="modal-creative-card">
+                    <div class="modal-image-grid">
+                        <img src="assets/ELEMENTS/CREATIVES/SINGLE P 1.jpg" alt="P1">
+                        <img src="assets/ELEMENTS/CREATIVES/SINGLE P 2'.jpg" alt="P2">
+                        <img src="assets/ELEMENTS/CREATIVES/SINGLE P3.jpg" alt="P3">
+                    </div>
+                    <p>✦ SINGLE POSTS</p>
+                </div>
+                <div class="modal-creative-card">
+                    <div class="modal-image-grid">
+                        <img src="assets/ELEMENTS/CREATIVES/CAROUSEL 1.png" alt="C1">
+                        <img src="assets/ELEMENTS/CREATIVES/CAROUSEL 2.png" alt="C2">
+                        <img src="assets/ELEMENTS/CREATIVES/CAROUSEL 3.png" alt="C3">
+                    </div>
+                    <p>◉ CAROUSELS</p>
+                </div>
+                <div class="modal-creative-card">
+                    <div class="modal-image-grid">
+                        <img src="assets/ELEMENTS/CREATIVES/FESTIVES1.jpg" alt="F1">
+                        <img src="assets/ELEMENTS/CREATIVES/FESTIVES 2.png" alt="F2">
+                        <img src="assets/ELEMENTS/CREATIVES/FESTIVES 3.png" alt="F3">
+                    </div>
+                    <p>✧ FESTIVES</p>
+                </div>
+                <div class="modal-creative-card">
+                    <div class="modal-image-grid">
+                        <img src="assets/ELEMENTS/CREATIVES/FREELANCE 01 .png" alt="FR1">
+                        <img src="assets/ELEMENTS/CREATIVES/FREE LANCE 02.png" alt="FR2">
+                        <img src="assets/ELEMENTS/CREATIVES/FREELANCE03.png" alt="FR3">
+                    </div>
+                    <p>⚡ FREELANCE</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center;">
+                <a href="https://drive.google.com/drive/folders/1kkrs1YpMqX01pC5r7ZYWDZRnlYoEN-di?usp=share_link" target="_blank" class="download-btn">View Reels Studio</a>
+            </div>
+        `,
+
+        digital_painting: `
+            <h2>DIGITAL PAINTING</h2>
+            <p>Freelance digital art and commissions.</p>
+            
+            <div class="media-grid">
+                <div class="product-item">
+                    <div class="img-frame"><img src="assets/ELEMENTS/DIGITAL PAINTING/FAMILY P.jpg" alt="Family"></div>
+                    <p>FAMILY PHOTO</p>
+                </div>
+                <div class="product-item">
+                    <div class="img-frame"><img src="assets/ELEMENTS/DIGITAL PAINTING/HORSE P.png" alt="Horses"></div>
+                    <p>7 HORSES PAINTING</p>
+                </div>
+            </div>
+        `
+    };
+
+    const modal = document.getElementById("projectModal");
+    const modalBody = document.getElementById("modal-body");
+    const closeBtn = modal.querySelector(".close-btn");
+    const modalOverlay = modal.querySelector(".modal-overlay");
+    const openButtons = document.querySelectorAll(".open-project");
+    let modalCloseTimer;
+    const prepareMedia = (root = document) => {
+        root.querySelectorAll("img").forEach(img => {
+            if (!img.hasAttribute("loading") && !img.closest(".hero-image")) {
+                img.loading = "lazy";
+            }
+            img.decoding = "async";
+        });
+    };
+
+    prepareMedia();
+
+    openButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const projectKey = btn.dataset.project;
+            if (projects[projectKey]) {
+                clearTimeout(modalCloseTimer);
+                btn.classList.add("is-pressing");
+                modalBody.innerHTML = projects[projectKey];
+                prepareMedia(modalBody);
+                modal.classList.remove("closing");
+                modal.classList.add("visible");
+                document.body.style.overflow = "hidden"; // Prevent scrolling
+                document.body.classList.add("modal-open");
+
+                requestAnimationFrame(() => {
+                    btn.classList.remove("is-pressing");
+                    btn.blur();
+                    modal.classList.add("active");
+                });
+            }
+        });
+    });
+
+    const closeModal = () => {
+        if (!modal.classList.contains("visible") || modal.classList.contains("closing")) return;
+        modal.classList.remove("active");
+        modal.classList.add("closing");
+        document.body.classList.remove("modal-open");
+        document.body.style.overflow = ""; // Enable scrolling
+
+        modalCloseTimer = setTimeout(() => {
+            modal.classList.remove("visible", "closing");
+            modalBody.innerHTML = "";
+        }, 460);
+    };
+
+    closeBtn.addEventListener("click", closeModal);
+    modalOverlay.addEventListener("click", closeModal);
+
+    // Close on Escape key
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("active")) {
+            closeModal();
         }
-
-        setTimeout(() => {
-          window.location.href = href;
-        }, 600);
-      });
-    }
-  });
-
-  // Handle browser back button (pageshow)
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) {
-      document.body.classList.remove("page-exit");
-      if (overlay) {
-        overlay.classList.remove("active");
-      }
-    }
-  });
-
-  // Navigation active state
-  const currentPath = window.location.pathname;
-  const navLinks = document.querySelectorAll('.nav-links a');
-  
-  navLinks.forEach(link => {
-    if (currentPath.includes(link.getAttribute('href')) && link.getAttribute('href') !== '#') {
-      link.classList.add('active');
-    } else {
-      link.classList.remove('active');
-    }
-  });
-
-  // Handle browser back button (pageshow)
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted && pageTransition) {
-      pageTransition.classList.remove("fade-out");
-      pageTransition.classList.add("show");
-    }
-  });
-
-  if (typeof gsap === "undefined") return;
-
-  // Background animations
-  const blobs = document.querySelectorAll(".bg-blob");
-  blobs.forEach((blob, index) => {
-    gsap.to(blob, {
-      y: index % 2 === 0 ? -24 : 24,
-      x: index === 1 ? -14 : 12,
-      duration: 10 + index * 2,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
     });
-  });
 
-  // Entrance animations for content boxes
-  gsap.from(".content-box", {
-    opacity: 0,
-    y: 30,
-    duration: 1,
-    ease: "power2.out"
-  });
+    // --- ANIMATIONS ---
+    if (typeof gsap !== "undefined") {
+        // Optimized Scroll Reveal Animations
+        const revealElements = gsap.utils.toArray('.gsap-reveal:not(.work-card), .hero-left, .hero-right');
+        
+        revealElements.forEach(el => {
+            gsap.fromTo(el, 
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
 
-  // Hover effects for cards
-  const cards = document.querySelectorAll(".image-card");
-  cards.forEach(card => {
-    card.addEventListener("mouseenter", () => {
-      gsap.to(card, { y: -10, duration: 0.3 });
-    });
-    card.addEventListener("mouseleave", () => {
-      gsap.to(card, { y: 0, duration: 0.3 });
-    });
-  });
+        gsap.fromTo('.work-card.gsap-reveal',
+            { y: 44, opacity: 0 },
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                stagger: 0.08,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: '.work-grid',
+                    start: "top 82%",
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
 
-  // Entrance animations for sections
-  const sections = document.querySelectorAll("section");
-  if (sections.length > 0) {
-    gsap.from(sections, {
-      opacity: 0,
-      y: 20,
-      duration: 0.8,
-      stagger: 0.2,
-      scrollTrigger: {
-        trigger: ".content-box",
-        start: "top 80%",
-      }
-    });
-  }
+        // Circular progress animation
+        document.querySelectorAll('.progress-circle').forEach(circle => {
+            const progress = circle.getAttribute('data-progress');
+            
+            gsap.fromTo(circle, 
+                { '--progress-deg': '0deg' },
+                {
+                    '--progress-deg': `${progress * 3.6}deg`,
+                    duration: 1.5,
+                    ease: "power2.out",
+                    onUpdate: function() {
+                        circle.style.background = `conic-gradient(var(--accent-pink) ${this.targets()[0].style.getPropertyValue('--progress-deg')}, rgba(255, 255, 255, 0.1) 0deg)`;
+                    },
+                    scrollTrigger: {
+                        trigger: circle,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        // Floating animations for decorative elements
+        gsap.to('.decorative-star, .decorative-triangle', {
+            y: 15,
+            rotation: 10,
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+    }
 });
