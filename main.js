@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
     // Register GSAP Plugins (Keep only for specialized animations)
-    if (typeof gsap !== "undefined") {
+    if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
         gsap.registerPlugin(ScrollTrigger);
     }
 
@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const toggleMenu = () => {
         hamburger.classList.toggle('active');
         navLinksList.classList.toggle('active');
-        document.body.style.overflow = navLinksList.classList.contains('active') ? 'hidden' : '';
+        document.body.classList.toggle('menu-open', navLinksList.classList.contains('active'));
     };
 
     hamburger.addEventListener('click', toggleMenu);
@@ -58,17 +58,16 @@ window.addEventListener("DOMContentLoaded", () => {
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = "1";
-                entry.target.style.transform = "translate3d(0, 0, 0)";
+                entry.target.classList.add("is-revealed");
                 revealObserver.unobserve(entry.target); // Animate ONLY once
+                window.setTimeout(() => {
+                    entry.target.style.willChange = "auto";
+                }, 650);
             }
         });
     }, revealObserverOptions);
 
     revealElements.forEach(el => {
-        el.style.opacity = "0";
-        el.style.transform = "translate3d(0, 30px, 0)";
-        el.style.transition = "opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
         revealObserver.observe(el);
     });
 
@@ -295,9 +294,9 @@ window.addEventListener("DOMContentLoaded", () => {
                 clearTimeout(modalCloseTimer);
                 btn.classList.add("is-pressing");
                 modalBody.innerHTML = projects[projectKey];
+                modal.querySelector(".modal-content").scrollTop = 0;
                 modal.classList.remove("closing");
                 modal.classList.add("visible");
-                document.body.style.overflow = "hidden"; 
                 document.body.classList.add("modal-open");
 
                 requestAnimationFrame(() => {
@@ -313,7 +312,6 @@ window.addEventListener("DOMContentLoaded", () => {
         modal.classList.remove("active");
         modal.classList.add("closing");
         document.body.classList.remove("modal-open");
-        document.body.style.overflow = ""; 
 
         modalCloseTimer = setTimeout(() => {
             modal.classList.remove("visible", "closing");
@@ -332,27 +330,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // --- OTHER SPECIALIZED ANIMATIONS ---
     if (typeof gsap !== "undefined") {
-        // Circular progress animation (Still good for ScrollTrigger)
+        // Circular progress indicators: set once to avoid scroll-triggered paint work.
         document.querySelectorAll('.progress-circle').forEach(circle => {
             const progress = circle.getAttribute('data-progress');
-            
-            gsap.fromTo(circle, 
-                { '--progress-deg': '0deg' },
-                {
-                    '--progress-deg': `${progress * 3.6}deg`,
-                    duration: 1.5,
-                    ease: "power2.out",
-                    onUpdate: function() {
-                        circle.style.background = `conic-gradient(var(--accent-pink) ${this.targets()[0].style.getPropertyValue('--progress-deg')}, rgba(255, 255, 255, 0.1) 0deg)`;
-                    },
-                    scrollTrigger: {
-                        trigger: circle,
-                        start: "top 85%",
-                        toggleActions: "play none none none", // Play once
-                        once: true
-                    }
-                }
-            );
+            circle.style.background = `conic-gradient(var(--accent-pink) ${progress * 3.6}deg, rgba(255, 255, 255, 0.1) 0deg)`;
         });
 
         // Floating animations for decorative elements
