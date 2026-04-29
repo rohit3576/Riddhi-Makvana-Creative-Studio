@@ -1,20 +1,39 @@
 window.addEventListener("DOMContentLoaded", () => {
-    // Register GSAP Plugins
+    // Register GSAP Plugins (Keep only for specialized animations)
     if (typeof gsap !== "undefined") {
         gsap.registerPlugin(ScrollTrigger);
     }
 
-    // --- NAVIGATION LOGIC ---
+    // --- MOBILE MENU LOGIC ---
+    const hamburger = document.querySelector('.hamburger');
+    const navLinksList = document.querySelector('.nav-links');
     const navLinks = document.querySelectorAll('.nav-links a');
-    const sections = document.querySelectorAll('section');
 
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.3
+    const toggleMenu = () => {
+        hamburger.classList.toggle('active');
+        navLinksList.classList.toggle('active');
+        document.body.style.overflow = navLinksList.classList.contains('active') ? 'hidden' : '';
     };
 
-    const observer = new IntersectionObserver((entries) => {
+    hamburger.addEventListener('click', toggleMenu);
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (navLinksList.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+    });
+
+    // --- SMOOTH SCROLL & NAV ACTIVE STATE ---
+    const sections = document.querySelectorAll('section');
+    const navObserverOptions = {
+        root: null,
+        threshold: 0.3,
+        rootMargin: "-10% 0px -70% 0px"
+    };
+
+    const navObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 navLinks.forEach(link => {
@@ -25,9 +44,33 @@ window.addEventListener("DOMContentLoaded", () => {
                 });
             }
         });
-    }, observerOptions);
+    }, navObserverOptions);
 
-    sections.forEach(section => observer.observe(section));
+    sections.forEach(section => navObserver.observe(section));
+
+    // --- OPTIMIZED SCROLL REVEAL (IntersectionObserver) ---
+    const revealElements = document.querySelectorAll('.gsap-reveal, .hero-left, .hero-right');
+    const revealObserverOptions = {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = "1";
+                entry.target.style.transform = "translate3d(0, 0, 0)";
+                revealObserver.unobserve(entry.target); // Animate ONLY once
+            }
+        });
+    }, revealObserverOptions);
+
+    revealElements.forEach(el => {
+        el.style.opacity = "0";
+        el.style.transform = "translate3d(0, 30px, 0)";
+        el.style.transition = "opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
+        revealObserver.observe(el);
+    });
 
     // --- PROJECT MODAL LOGIC ---
     const projects = {
@@ -35,28 +78,28 @@ window.addEventListener("DOMContentLoaded", () => {
             <div class="project-header">
                 <h2>ASTRIS SEAT COVERS</h2>
                 <div class="logo-box">
-                    <img src="assets/ELEMENTS/CEAT/logo transparant.png" alt="CEAT">
+                    <img src="assets/ELEMENTS/CEAT/logo transparant.png" alt="CEAT" loading="lazy" decoding="async">
                 </div>
             </div>
             
             <div class="brand-intro-section">
                 <p>Conceptualized a brand extension for CEAT - ASTRIS, focused on sustainable and budget-friendly automotive accessories, including seat covers and steering covers.</p>
-                <img src="assets/ELEMENTS/CEAT/ASTRIS.png" alt="ASTRIS SEAT COVERS">
+                <img src="assets/ELEMENTS/CEAT/ASTRIS.png" alt="ASTRIS SEAT COVERS" loading="lazy" decoding="async">
             </div>
 
             <div class="introducing-section">
                 <h3 style="color: var(--accent-pink); margin-bottom: 20px;">INTRODUCING</h3>
                 <div class="product-showcase">
                     <div class="product-item">
-                        <div class="img-frame"><img src="assets/ELEMENTS/CEAT/SPORTS .jpg" alt="SPORTS"></div>
+                        <div class="img-frame"><img src="assets/ELEMENTS/CEAT/SPORTS .jpg" alt="SPORTS" loading="lazy" decoding="async"></div>
                         <p>SPORTS</p>
                     </div>
                     <div class="product-item">
-                        <div class="img-frame"><img src="assets/ELEMENTS/CEAT/PET PROOF.jpg" alt="PET PROOF"></div>
+                        <div class="img-frame"><img src="assets/ELEMENTS/CEAT/PET PROOF.jpg" alt="PET PROOF" loading="lazy" decoding="async"></div>
                         <p>PET PROOF</p>
                     </div>
                     <div class="product-item">
-                        <div class="img-frame"><img src="assets/ELEMENTS/CEAT/LUXURY.jpg" alt="LUXURY"></div>
+                        <div class="img-frame"><img src="assets/ELEMENTS/CEAT/LUXURY.jpg" alt="LUXURY" loading="lazy" decoding="async"></div>
                         <p>LUXURY</p>
                     </div>
                 </div>
@@ -66,15 +109,15 @@ window.addEventListener("DOMContentLoaded", () => {
                 <h3 style="color: var(--accent-pink); margin-bottom: 20px;">MARKETING STRATEGY</h3>
                 <div class="media-grid">
                     <div class="media-item">
-                        <img src="assets/ELEMENTS/CEAT/BILLBOARD.png" alt="Billboard">
+                        <img src="assets/ELEMENTS/CEAT/BILLBOARD.png" alt="Billboard" loading="lazy" decoding="async">
                         <p>Billboard</p>
                     </div>
                     <div class="media-item">
-                        <img src="assets/ELEMENTS/CEAT/NEWPAPER.png" alt="Newspaper">
+                        <img src="assets/ELEMENTS/CEAT/NEWPAPER.png" alt="Newspaper" loading="lazy" decoding="async">
                         <p>Newspaper</p>
                     </div>
                     <div class="media-item">
-                        <img src="assets/ELEMENTS/CEAT/SOCIAL M.png" alt="Social Media">
+                        <img src="assets/ELEMENTS/CEAT/SOCIAL M.png" alt="Social Media" loading="lazy" decoding="async">
                         <p>Social Media</p>
                     </div>
                 </div>
@@ -87,7 +130,7 @@ window.addEventListener("DOMContentLoaded", () => {
             <h2>S!NX by SNITCH</h2>
             <p>Brand Strategy & Design for Gen Z urban youth streetwear.</p>
             
-            <img src="assets/ELEMENTS/SNITCH/SINXfinal.svg" alt="S!NX Banner" style="background: white; padding: 20px;">
+            <img src="assets/ELEMENTS/SNITCH/SINXfinal.svg" alt="S!NX Banner" style="background: white; padding: 20px;" loading="lazy" decoding="async">
 
             <div class="stp-grid">
                 <div class="stp-col">
@@ -106,15 +149,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
             <div class="product-showcase">
                 <div class="product-item">
-                    <div class="img-frame"><img src="assets/ELEMENTS/SNITCH/THE OG.png" alt="The Originals"></div>
+                    <div class="img-frame"><img src="assets/ELEMENTS/SNITCH/THE OG.png" alt="The Originals" loading="lazy" decoding="async"></div>
                     <p>THE ORIGINALS</p>
                 </div>
                 <div class="product-item">
-                    <div class="img-frame"><img src="assets/ELEMENTS/SNITCH/GLOW.png" alt="Glow"></div>
+                    <div class="img-frame"><img src="assets/ELEMENTS/SNITCH/GLOW.png" alt="Glow" loading="lazy" decoding="async"></div>
                     <p>GLOW</p>
                 </div>
                 <div class="product-item">
-                    <div class="img-frame"><img src="assets/ELEMENTS/SNITCH/SWTICH.jpg" alt="Switch"></div>
+                    <div class="img-frame"><img src="assets/ELEMENTS/SNITCH/SWTICH.jpg" alt="Switch" loading="lazy" decoding="async"></div>
                     <p>SWITCH</p>
                 </div>
             </div>
@@ -143,34 +186,34 @@ window.addEventListener("DOMContentLoaded", () => {
             <h2>DYANSADHNA</h2>
             <p>Holistic child development brand nurturing mental and physical growth beyond academics.</p>
             
-            <img src="assets/ELEMENTS/DYANSADHNA/PRIMARY_LOGO.png" alt="Primary Logo" style="max-width: 300px; display: block; margin: 0 auto;">
+            <img src="assets/ELEMENTS/DYANSADHNA/PRIMARY_LOGO.png" alt="Primary Logo" style="max-width: 300px; display: block; margin: 0 auto;" loading="lazy" decoding="async">
 
             <div class="inner-section">
                 <h3 style="color: var(--accent-pink); margin-bottom: 20px;">LOGO EXPLANATION</h3>
                 <div class="media-grid">
-                    <img src="assets/ELEMENTS/DYANSADHNA/LOGO EXPLANATION Primary logo.png" alt="Logo Expl 1">
-                    <img src="assets/ELEMENTS/DYANSADHNA/LOGO EXPLANATION Secondary logo.png" alt="Logo Expl 2">
+                    <img src="assets/ELEMENTS/DYANSADHNA/LOGO EXPLANATION Primary logo.png" alt="Logo Expl 1" loading="lazy" decoding="async">
+                    <img src="assets/ELEMENTS/DYANSADHNA/LOGO EXPLANATION Secondary logo.png" alt="Logo Expl 2" loading="lazy" decoding="async">
                 </div>
             </div>
 
             <div class="inner-section">
                 <h3 style="color: var(--accent-pink); margin-bottom: 20px;">STATIONARY & MOCKUPS</h3>
                 <div class="media-grid">
-                    <img src="assets/ELEMENTS/DYANSADHNA/CORPORATE STATIONARY letterhead mockup.png" alt="Letterhead">
-                    <img src="assets/ELEMENTS/DYANSADHNA/outdoor mockup.png" alt="Outdoor">
-                    <img src="assets/ELEMENTS/DYANSADHNA/TRANSIT.png" alt="Transit">
+                    <img src="assets/ELEMENTS/DYANSADHNA/CORPORATE STATIONARY letterhead mockup.png" alt="Letterhead" loading="lazy" decoding="async">
+                    <img src="assets/ELEMENTS/DYANSADHNA/outdoor mockup.png" alt="Outdoor" loading="lazy" decoding="async">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TRANSIT.png" alt="Transit" loading="lazy" decoding="async">
                 </div>
             </div>
 
             <div class="inner-section">
                 <h3 style="color: var(--accent-pink); margin-bottom: 20px;">TVC STORYBOARD</h3>
                 <div class="storyboard-grid">
-                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/O1.png" alt="S1">
-                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/02.png" alt="S2">
-                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/03.png" alt="S3">
-                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/04.png" alt="S4">
-                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/05.png" alt="S5">
-                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/06.png" alt="S6">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/O1.png" alt="S1" loading="lazy" decoding="async">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/02.png" alt="S2" loading="lazy" decoding="async">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/03.png" alt="S3" loading="lazy" decoding="async">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/04.png" alt="S4" loading="lazy" decoding="async">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/05.png" alt="S5" loading="lazy" decoding="async">
+                    <img src="assets/ELEMENTS/DYANSADHNA/TVC STORYBOARD/06.png" alt="S6" loading="lazy" decoding="async">
                 </div>
             </div>
 
@@ -184,33 +227,33 @@ window.addEventListener("DOMContentLoaded", () => {
             <div class="modal-creatives-grid">
                 <div class="modal-creative-card">
                     <div class="modal-image-grid">
-                        <img src="assets/ELEMENTS/CREATIVES/SINGLE P 1.jpg" alt="P1">
-                        <img src="assets/ELEMENTS/CREATIVES/SINGLE P 2'.jpg" alt="P2">
-                        <img src="assets/ELEMENTS/CREATIVES/SINGLE P3.jpg" alt="P3">
+                        <img src="assets/ELEMENTS/CREATIVES/SINGLE P 1.jpg" alt="P1" loading="lazy" decoding="async">
+                        <img src="assets/ELEMENTS/CREATIVES/SINGLE P 2'.jpg" alt="P2" loading="lazy" decoding="async">
+                        <img src="assets/ELEMENTS/CREATIVES/SINGLE P3.jpg" alt="P3" loading="lazy" decoding="async">
                     </div>
                     <p>✦ SINGLE POSTS</p>
                 </div>
                 <div class="modal-creative-card">
                     <div class="modal-image-grid">
-                        <img src="assets/ELEMENTS/CREATIVES/CAROUSEL 1.png" alt="C1">
-                        <img src="assets/ELEMENTS/CREATIVES/CAROUSEL 2.png" alt="C2">
-                        <img src="assets/ELEMENTS/CREATIVES/CAROUSEL 3.png" alt="C3">
+                        <img src="assets/ELEMENTS/CREATIVES/CAROUSEL 1.png" alt="C1" loading="lazy" decoding="async">
+                        <img src="assets/ELEMENTS/CREATIVES/CAROUSEL 2.png" alt="C2" loading="lazy" decoding="async">
+                        <img src="assets/ELEMENTS/CREATIVES/CAROUSEL 3.png" alt="C3" loading="lazy" decoding="async">
                     </div>
                     <p>◉ CAROUSELS</p>
                 </div>
                 <div class="modal-creative-card">
                     <div class="modal-image-grid">
-                        <img src="assets/ELEMENTS/CREATIVES/FESTIVES1.jpg" alt="F1">
-                        <img src="assets/ELEMENTS/CREATIVES/FESTIVES 2.png" alt="F2">
-                        <img src="assets/ELEMENTS/CREATIVES/FESTIVES 3.png" alt="F3">
+                        <img src="assets/ELEMENTS/CREATIVES/FESTIVES1.jpg" alt="F1" loading="lazy" decoding="async">
+                        <img src="assets/ELEMENTS/CREATIVES/FESTIVES 2.png" alt="F2" loading="lazy" decoding="async">
+                        <img src="assets/ELEMENTS/CREATIVES/FESTIVES 3.png" alt="F3" loading="lazy" decoding="async">
                     </div>
                     <p>✧ FESTIVES</p>
                 </div>
                 <div class="modal-creative-card">
                     <div class="modal-image-grid">
-                        <img src="assets/ELEMENTS/CREATIVES/FREELANCE 01 .png" alt="FR1">
-                        <img src="assets/ELEMENTS/CREATIVES/FREE LANCE 02.png" alt="FR2">
-                        <img src="assets/ELEMENTS/CREATIVES/FREELANCE03.png" alt="FR3">
+                        <img src="assets/ELEMENTS/CREATIVES/FREELANCE 01 .png" alt="FR1" loading="lazy" decoding="async">
+                        <img src="assets/ELEMENTS/CREATIVES/FREE LANCE 02.png" alt="FR2" loading="lazy" decoding="async">
+                        <img src="assets/ELEMENTS/CREATIVES/FREELANCE03.png" alt="FR3" loading="lazy" decoding="async">
                     </div>
                     <p>⚡ FREELANCE</p>
                 </div>
@@ -227,11 +270,11 @@ window.addEventListener("DOMContentLoaded", () => {
             
             <div class="media-grid">
                 <div class="product-item">
-                    <div class="img-frame"><img src="assets/ELEMENTS/DIGITAL PAINTING/FAMILY P.jpg" alt="Family"></div>
+                    <div class="img-frame"><img src="assets/ELEMENTS/DIGITAL PAINTING/FAMILY P.jpg" alt="Family" loading="lazy" decoding="async"></div>
                     <p>FAMILY PHOTO</p>
                 </div>
                 <div class="product-item">
-                    <div class="img-frame"><img src="assets/ELEMENTS/DIGITAL PAINTING/HORSE P.png" alt="Horses"></div>
+                    <div class="img-frame"><img src="assets/ELEMENTS/DIGITAL PAINTING/HORSE P.png" alt="Horses" loading="lazy" decoding="async"></div>
                     <p>7 HORSES PAINTING</p>
                 </div>
             </div>
@@ -244,16 +287,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const modalOverlay = modal.querySelector(".modal-overlay");
     const openButtons = document.querySelectorAll(".open-project");
     let modalCloseTimer;
-    const prepareMedia = (root = document) => {
-        root.querySelectorAll("img").forEach(img => {
-            if (!img.hasAttribute("loading") && !img.closest(".hero-image")) {
-                img.loading = "lazy";
-            }
-            img.decoding = "async";
-        });
-    };
-
-    prepareMedia();
 
     openButtons.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -262,15 +295,13 @@ window.addEventListener("DOMContentLoaded", () => {
                 clearTimeout(modalCloseTimer);
                 btn.classList.add("is-pressing");
                 modalBody.innerHTML = projects[projectKey];
-                prepareMedia(modalBody);
                 modal.classList.remove("closing");
                 modal.classList.add("visible");
-                document.body.style.overflow = "hidden"; // Prevent scrolling
+                document.body.style.overflow = "hidden"; 
                 document.body.classList.add("modal-open");
 
                 requestAnimationFrame(() => {
                     btn.classList.remove("is-pressing");
-                    btn.blur();
                     modal.classList.add("active");
                 });
             }
@@ -282,7 +313,7 @@ window.addEventListener("DOMContentLoaded", () => {
         modal.classList.remove("active");
         modal.classList.add("closing");
         document.body.classList.remove("modal-open");
-        document.body.style.overflow = ""; // Enable scrolling
+        document.body.style.overflow = ""; 
 
         modalCloseTimer = setTimeout(() => {
             modal.classList.remove("visible", "closing");
@@ -293,52 +324,15 @@ window.addEventListener("DOMContentLoaded", () => {
     closeBtn.addEventListener("click", closeModal);
     modalOverlay.addEventListener("click", closeModal);
 
-    // Close on Escape key
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && modal.classList.contains("active")) {
             closeModal();
         }
     });
 
-    // --- ANIMATIONS ---
+    // --- OTHER SPECIALIZED ANIMATIONS ---
     if (typeof gsap !== "undefined") {
-        // Optimized Scroll Reveal Animations
-        const revealElements = gsap.utils.toArray('.gsap-reveal:not(.work-card), .hero-left, .hero-right');
-        
-        revealElements.forEach(el => {
-            gsap.fromTo(el, 
-                { y: 50, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 1,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: el,
-                        start: "top 85%",
-                        toggleActions: "play none none reverse"
-                    }
-                }
-            );
-        });
-
-        gsap.fromTo('.work-card.gsap-reveal',
-            { y: 44, opacity: 0 },
-            {
-                y: 0,
-                opacity: 1,
-                duration: 0.9,
-                stagger: 0.08,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: '.work-grid',
-                    start: "top 82%",
-                    toggleActions: "play none none reverse"
-                }
-            }
-        );
-
-        // Circular progress animation
+        // Circular progress animation (Still good for ScrollTrigger)
         document.querySelectorAll('.progress-circle').forEach(circle => {
             const progress = circle.getAttribute('data-progress');
             
@@ -354,7 +348,8 @@ window.addEventListener("DOMContentLoaded", () => {
                     scrollTrigger: {
                         trigger: circle,
                         start: "top 85%",
-                        toggleActions: "play none none reverse"
+                        toggleActions: "play none none none", // Play once
+                        once: true
                     }
                 }
             );
